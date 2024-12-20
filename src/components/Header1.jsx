@@ -106,7 +106,7 @@ function Header1() {
   return (
     <HeaderContainer>
       <Navbar>
-        <Logo src="./src/assets/images/logoicon.png" alt="Logo" />
+        <Logo src="./public/images/logoicon.png" alt="Logo" />
         <Title href="/">Convocation Seating Arrangement</Title>
 
         <NavbarToggler>
