@@ -127,7 +127,7 @@ const Header = ({ onLogout }) => {
   return (
     <HeaderContainer>
       <Navbar>
-        <Logo src="./public/images/logoicon.png" alt="Logo" />
+        <Logo src="./images/logoicon.png" alt="Logo" />
         <Title href="/">Convocation Seating Arrangement</Title>
         <NavbarToggler onClick={toggleMenu} aria-expanded={menuOpen}>
           <NavbarTogglerIcon />

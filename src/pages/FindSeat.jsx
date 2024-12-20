@@ -10,7 +10,7 @@ const Section = styled.section`
   background: #e8f2f9;
   padding: 15px;
   border-radius: 8px;
-  background-image: url("./public/images/fSeat.png");
+  background-image: url("./images/fSeat.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   color: #d4f1f4;

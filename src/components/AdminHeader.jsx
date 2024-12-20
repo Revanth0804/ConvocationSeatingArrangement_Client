@@ -123,7 +123,7 @@ const AdminHeader = ({ onLogout }) => {
   return (
     <HeaderContainer>
       <Navbar>
-        <Logo src="./public/images/logo1.jpeg" alt="Logo" />
+        <Logo src="./images/logo1.jpeg" alt="Logo" />
         <Title href="#">Convocation Seating Arrangement</Title>
         <NavbarToggler onClick={toggleMenu}>
           <NavbarTogglerIcon isOpen={menuOpen} />
