@@ -81,7 +81,7 @@ const VisualMap1 = ({ highlightedSeat }) => {
   return (
     <SeatingLayoutContainer>
       {rows}
-      <ScreenImage src="../public/images/screen.png" alt="Screen" />
+      <ScreenImage src="./images/screen.png" alt="Screen" />
     </SeatingLayoutContainer>
   );
 };
