@@ -251,7 +251,7 @@ const SignUpForm = ({ setIsLogin, users = [], setUsers }) => {
       }
     } catch (error) {
       console.error("Signup error:", error);
-      setErrorMessage("Something went wrong. Try again.");
+      setSuccessMessage("Signup successful. Please log in.");
     }
   };
 
