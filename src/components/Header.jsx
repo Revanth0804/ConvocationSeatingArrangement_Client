@@ -1,39 +1,81 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
+// === Animations ===
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
+const slideIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+// === Styled Components ===
 const HeaderContainer = styled.header`
   position: sticky;
   top: 0;
   z-index: 1050;
+  background-color: #05445e;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: ${fadeIn} 0.5s ease-out;
 `;
 
 const Navbar = styled.nav`
-  background-color: #05445e;
-  color: white;
   display: flex;
   align-items: center;
-  padding: 10px;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background-color: #1a202c;
+  position: relative;
+  animation: ${fadeIn} 0.5s ease-out;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Logo = styled.img`
-  margin-left: 2%;
   height: 50px;
+  margin-left: 2%;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const Title = styled.a`
   margin-left: 1%;
   color: white;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  text-decoration: none;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   font-size: 1.5rem;
   font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #80ced7;
+  }
 `;
 
 const NavbarToggler = styled.button`
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: space-around;
   width: 30px;
@@ -47,6 +89,10 @@ const NavbarToggler = styled.button`
   &:focus {
     outline: none;
   }
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
 `;
 
 const NavbarTogglerIcon = styled.div`
@@ -55,29 +101,44 @@ const NavbarTogglerIcon = styled.div`
   background-color: #ffffff;
   border-radius: 2px;
   transition: all 0.3s linear;
-`;
 
-const MenuCard = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100vh;
-  background-color: #05445e;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  transform: ${({ isOpen }) => (isOpen ? "translateX(0)" : "translateX(-100%)")};
-  transition: transform 0.3s ease-in-out;
+  &:nth-child(1) {
+    transform: ${({ isOpen }) => (isOpen ? "rotate(45deg) translate(5px, 5px)" : "none")};
+  }
+
+  &:nth-child(2) {
+    opacity: ${({ isOpen }) => (isOpen ? 0 : 1)};
+  }
+
+  &:nth-child(3) {
+    transform: ${({ isOpen }) => (isOpen ? "rotate(-45deg) translate(5px, -5px)" : "none")};
+  }
 `;
 
 const NavList = styled.ul`
+  display: flex;
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-left: auto;
+  animation: ${slideIn} 0.3s ease-out;
+
+  @media (max-width: 768px) {
+    display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+    width: 100%;
+    text-align: center;
+    margin-top: 0px;
+    background-color: #05445e;
+    padding: 20px 0;
+  }
 `;
 
 const NavItem = styled.li`
-  margin-bottom: 10px;
+  margin-left: 0;
+
+  @media (max-width: 768px) {
+    margin: 0;
+  }
 `;
 
 const MenuItem = styled(NavLink)`
@@ -87,8 +148,15 @@ const MenuItem = styled(NavLink)`
   text-align: left;
   display: block;
   text-decoration: none;
+  transition: all 0.3s ease;
 
   &:hover {
+    color: #80ced7;
+    background-color: #033649;
+    border-radius: 4px;
+  }
+
+  &.active {
     color: #80ced7;
     background-color: #033649;
     border-radius: 4px;
@@ -96,20 +164,28 @@ const MenuItem = styled(NavLink)`
 `;
 
 const LogoutButton = styled.button`
+  background-color: #38b2ac;
   width: 100px;
-  background-color: red;
   color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: #ff6b6b;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: none;
   }
 `;
 
-
+// === Component ===
 const Header = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -118,49 +194,51 @@ const Header = ({ onLogout }) => {
     setMenuOpen(!menuOpen);
   };
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   const handleLogout = () => {
-    onLogout(); 
-    toggleMenu();
-    navigate("/"); 
+    onLogout();
+    closeMenu();
+    navigate("/");
   };
 
   return (
     <HeaderContainer>
       <Navbar>
         <Logo src="./images/logoicon.png" alt="Logo" />
-        <Title href="/">Convocation Seating Arrangement</Title>
-        <NavbarToggler onClick={toggleMenu} aria-expanded={menuOpen}>
-          <NavbarTogglerIcon />
-          <NavbarTogglerIcon />
-          <NavbarTogglerIcon />
-        </NavbarToggler>
-      </Navbar>
+        <Title href="/">Convocation Seating Hub</Title>
 
-      {/* Side Card Menu */}
-      <MenuCard isOpen={menuOpen}>
-        <NavList>
+        <NavbarToggler onClick={toggleMenu} aria-expanded={menuOpen}>
+          <NavbarTogglerIcon isOpen={menuOpen} />
+          <NavbarTogglerIcon isOpen={menuOpen} />
+          <NavbarTogglerIcon isOpen={menuOpen} />
+        </NavbarToggler>
+
+        <NavList isOpen={menuOpen}>
           <NavItem>
-            <MenuItem to="/" onClick={toggleMenu}>
+            <MenuItem to="/" activeClassName="active" onClick={closeMenu}>
               Home
             </MenuItem>
           </NavItem>
           <NavItem>
-            <MenuItem to="/Dashboard1" onClick={toggleMenu}>
+            <MenuItem to="/Dashboard1" activeClassName="active" onClick={closeMenu}>
               Dashboard
             </MenuItem>
           </NavItem>
           <NavItem>
-            <MenuItem to="/findseat" onClick={toggleMenu}>
+            <MenuItem to="/findseat" activeClassName="active" onClick={closeMenu}>
               Find Seat
             </MenuItem>
           </NavItem>
           <NavItem>
-            <MenuItem to="/visualmap" onClick={toggleMenu}>
-              Map
+            <MenuItem to="/visualmap" activeClassName="active" onClick={closeMenu}>
+              Event Space Overview
             </MenuItem>
           </NavItem>
           <NavItem>
-            <MenuItem to="/profile" onClick={toggleMenu}>
+            <MenuItem to="/profile" activeClassName="active" onClick={closeMenu}>
               Profile
             </MenuItem>
           </NavItem>
@@ -168,7 +246,7 @@ const Header = ({ onLogout }) => {
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </NavItem>
         </NavList>
-      </MenuCard>
+      </Navbar>
     </HeaderContainer>
   );
 };
